@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Tech News - Home";
 }
-
+<input type="hidden" id="landing-page"/>
 <div class="py-5 rounded">
     <div class="p-4 p-md-5 mb-4 row">
         <div class="col-8 px-0">
@@ -21,9 +21,9 @@
             @if (!Model.IsAuthenticated)
             {
                 <p class="lead mb-0">
-                    <a href="/account/login" class="fw-bold link-offset-3 link-underline link-underline-opacity-0">Entre</a>
+                    <a id="login-user" href="/account/login" class="fw-bold link-offset-3 link-underline link-underline-opacity-0">Entre</a>
                     ou
-                    <a href="/account" class="fw-bold link-offset-3 link-underline link-underline-opacity-0">Cadastre-se</a>
+                    <a id="btnRegisterUser" href="/account" class="fw-bold link-offset-3 link-underline link-underline-opacity-0">Cadastre-se</a>
                     para acessar todas as notícias.
                 </p>
             }

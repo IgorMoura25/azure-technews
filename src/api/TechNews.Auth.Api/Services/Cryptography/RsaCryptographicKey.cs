@@ -3,12 +3,21 @@ using Microsoft.IdentityModel.Tokens;
 using TechNews.Auth.Api.Configurations;
 using TechNews.Auth.Api.Models;
 
+namespace TechNews.Auth.Api.Services.Cryptography;
+
 public class RsaCryptographicKey : ICryptographicKey
 {
     public Guid Id { get; private set; }
     public DateTime CreationDate { get; private set; }
     private RSA _keyInstance { get; set; }
 
+    public RsaCryptographicKey()
+    {
+        Id = Guid.NewGuid();
+        CreationDate = DateTime.UtcNow;
+        _keyInstance = RSA.Create(2048);
+    }
+    
     public RsaCryptographicKey(Guid id, DateTime creationDate, RSA instance)
     {
         Id = id;
