@@ -79,8 +79,7 @@ public class TestsFixture : IDisposable, IAsyncLifetime
                     Id = Guid.NewGuid(),
                     Email = f.Internet.Email(),
                     UserName = f.Internet.UserName(),
-                    Password = validPassword,
-                    Repassword = validPassword
+                    Password = validPassword
                 }
             );
 

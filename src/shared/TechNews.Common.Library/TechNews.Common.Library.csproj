@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EventStore.Client.Grpc" Version="23.1.0" />
+    <PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.0" />
   </ItemGroup>
 
 </Project>

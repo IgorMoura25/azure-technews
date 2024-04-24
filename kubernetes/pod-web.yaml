@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: technews-web
+  labels:
+    role: myrole
+spec:
+  containers:
+    - name: web
+      image: technews-web
+      env:
+        - name: TECHNEWS_APP_API_AUTH_URL
+          value: "http://cluster-ip-apis:5138"
+        - name: TECHNEWS_APP_API_CORE_URL
+          value: "http://cluster-ip-apis:5142"
+        - name: AUTH_EXPIRATION_IN_MINUTES
+          value: "20"
+      imagePullPolicy: Never
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP

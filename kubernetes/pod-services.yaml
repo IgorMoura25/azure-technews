@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: technews-services
+  labels:
+    app: technews-services
+spec:
+  containers:
+    - name: technews-rabbit-mq
+      image: rabbitmq:management
+      ports:
+        - name: rabbit-ui
+          containerPort: 15672
+          protocol: TCP
+
+        - name: rabbit-service
+          containerPort: 5672
+          protocol: TCP
+
+    - name: technews-event-store
+      image: eventstore/eventstore
+      ports:
+        - name: default
+          containerPort: 2113
+          protocol: TCP
+      args:
+        - "--insecure"
+        - "--run-projections=All"
+        - "--enable-atom-pub-over-http"

@@ -288,7 +288,7 @@ const createAccount = () => {
                 return;
             }
 
-            window.location.href = '/news';
+            showWarningAlert([{ description: 'Você receberá um e-mail de confirmação da conta.' }]);
         })
         .catch(error => {
             PageLoading.hide();

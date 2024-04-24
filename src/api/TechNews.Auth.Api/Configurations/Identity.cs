@@ -9,7 +9,8 @@ public static class Identity
     {
         services.AddIdentity<User, Role>()
                 .AddRoles<Role>()
-                .AddEntityFrameworkStores<AuthDbContext>();
+                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddDefaultTokenProviders();
 
         services.Configure<IdentityOptions>(options =>
         {
@@ -30,7 +31,7 @@ public static class Identity
             options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";
             options.User.RequireUniqueEmail = true;
 
-            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedEmail = true;
             options.SignIn.RequireConfirmedPhoneNumber = false;
             options.SignIn.RequireConfirmedAccount = false;
         });

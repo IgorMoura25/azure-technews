@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-ip-notitification
+spec:
+  selector:
+    app: technews-notification
+  ports:
+    - name: main
+      protocol: TCP
+      port: 80
+      targetPort: 80

@@ -57,25 +57,6 @@ public class AccountController : Controller
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
-        var responseString = await apiResponse.Content.ReadAsStringAsync();
-        var appResponse = JsonSerializer.Deserialize<AppResponse>(responseString, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-        if (appResponse?.Data is null)
-        {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-
-        var accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse?>(appResponse.Data.ToString(), new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-        var token = GetTokenFromString(accessTokenResponse?.AccessToken);
-
-        if (token is null)
-        {
-            return StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-
-        await AuthenticateUserByTokenAsync(token);
-
         return Ok();
     }
 
@@ -92,7 +73,7 @@ public class AccountController : Controller
     {
         var client = _httpFactory.CreateClient();
         var content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-        var uri = $"{EnvironmentVariables.ApiAuthBaseUrl}/api/auth/user/login";
+        var uri = $"{EnvironmentVariables.ApiAuthBaseUrl}/api/auth/account/login";
 
         var apiResponse = await client.PostAsync(uri, content);
 
@@ -141,6 +122,26 @@ public class AccountController : Controller
 
         return Redirect("Login");
     }
+
+    [AllowAnonymous]
+    [HttpGet("email-confirmation")]
+    public async Task<IActionResult> ConfirmEmailAsync(string email, string token)
+    {
+        var client = _httpFactory.CreateClient();
+        var content = new StringContent(JsonSerializer.Serialize(new { Email = Encoding.UTF8.GetString(Convert.FromBase64String(email)), Token = Encoding.UTF8.GetString(Convert.FromBase64String(token)) }), Encoding.UTF8, "application/json");
+        var uri = $"{EnvironmentVariables.ApiAuthBaseUrl}/api/auth/account/confirmation";
+
+        var apiResponse = await client.PostAsync(uri, content);
+
+        if (!apiResponse.IsSuccessStatusCode)
+        {
+            // TODO: Tratar tela de erro corretamente
+            return View("Login");
+        }
+
+        return View("Login");
+    }
+
 
     private static JwtSecurityToken? GetTokenFromString(string? jwtToken)
     {

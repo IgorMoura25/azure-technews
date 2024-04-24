@@ -60,6 +60,16 @@
                 "/Views": "${workspaceFolder}/Views"
             }
         },
+        {
+            "name": "Tech News Notification Service",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/services/TechNews.Services.Notification/bin/Debug/net8.0/TechNews.Services.Notification.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/services/TechNews.Services.Notification",
+            "stopAtEntry": false,
+        }
     ],
     "compounds": [
         {
@@ -67,7 +77,8 @@
             "configurations": [
                 "Tech News API",
                 "Tech News Auth API",
-                "Tech News Web"
+                "Tech News Web",
+                "Tech News Notification Service"
             ],
             "stopAll": true,
         }

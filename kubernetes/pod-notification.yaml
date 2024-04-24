@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: notification-service
+  labels:
+    role: myrole
+spec:
+  containers:
+    - name: technews-notification-service
+      image: technews-notification-service:latest
+      env:
+        - name: TECHNEWS_SERVICES_NOTIFICATION_BROKER_CONFIRM_EMAIL_QUEUE_NAME
+          value: "confirm-email"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_BROKER_HOST_NAME
+          value: "cluster-ip-services"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_BROKER_VIRTUAL_HOST
+          value: "/"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_BROKER_USER_NAME
+          value: "guest"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_BROKER_PASSWORD
+          value: "guest"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_SMTP_HOST
+          value: "smtp.office365.com"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_SMTP_PORT
+          value: "587"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_SMTP_EMAIL
+          value: "pistoladasgroup@outlook.com"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_SMTP_PASSWORD
+          value: "Pass@5125"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_DISCORD_WEBHOOK_ID
+          value: "1122328330939674715"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_DISCORD_WEBHOOK_TOKEN
+          value: "niL_5e8BvqhJjH0WsLHZlSZPc_1-QjcfXE9RcqXz9CbqlnjQRICBMitMqpJsBx8fnEW9"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_WEB_URL
+          value: "http://localhost:8080"
+        - name: TECHNEWS_SERVICES_NOTIFICATION_LOGO_URL
+          value: "https://tech04.blob.core.windows.net/logo/TechNews.png"
+      imagePullPolicy: Never

@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechNews.Auth.Api.Integrati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechNews.Core.Api.IntegrationTests", "tests\integration\TechNews.Core.Api.IntegrationTests\TechNews.Core.Api.IntegrationTests.csproj", "{B9430392-147C-4D50-ADDD-AE3A1C8EE93F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{2AA5AC54-C203-4EEE-AFF1-8A42D3D6EC83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechNews.Services.Notification", "src\services\TechNews.Services.Notification\TechNews.Services.Notification.csproj", "{1DB05A97-781D-4A1F-83DC-62D53D2AB60D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,10 @@ Global
 		{B9430392-147C-4D50-ADDD-AE3A1C8EE93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9430392-147C-4D50-ADDD-AE3A1C8EE93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9430392-147C-4D50-ADDD-AE3A1C8EE93F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB05A97-781D-4A1F-83DC-62D53D2AB60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB05A97-781D-4A1F-83DC-62D53D2AB60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB05A97-781D-4A1F-83DC-62D53D2AB60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB05A97-781D-4A1F-83DC-62D53D2AB60D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +107,8 @@ Global
 		{0889293B-5565-42EA-8A53-9BAFADD9BBF8} = {B13517E0-0D56-4773-B295-A1870C392F2D}
 		{711B4F02-7D53-42DC-8A67-23C87007BBB2} = {0889293B-5565-42EA-8A53-9BAFADD9BBF8}
 		{B9430392-147C-4D50-ADDD-AE3A1C8EE93F} = {0889293B-5565-42EA-8A53-9BAFADD9BBF8}
+		{2AA5AC54-C203-4EEE-AFF1-8A42D3D6EC83} = {99F09EF3-EFE4-4355-8499-309A07FA1CD7}
+		{1DB05A97-781D-4A1F-83DC-62D53D2AB60D} = {2AA5AC54-C203-4EEE-AFF1-8A42D3D6EC83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1904BB76-12DE-4DD8-BA2C-4A8D2566F470}

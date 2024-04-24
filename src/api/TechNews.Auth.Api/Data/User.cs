@@ -15,4 +15,14 @@ public sealed class User : IdentityUser<Guid>
         Email = email;
         UserName = userName;
     }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+    }
+    
+    public void ConfirmEmail()
+    {
+        EmailConfirmed = true;
+    }
 }

@@ -9,6 +9,7 @@ public static class EnvironmentVariables
     public static string? DiscordWebhookId { get; private set; }
     public static string? DiscordWebhookToken { get; private set; }
     public static string? AuthJwksUrl { get; private set; }
+    public static string? AuthIssuer { get; private set; }
 
     public static IServiceCollection AddEnvironmentVariables(this IServiceCollection services, IWebHostEnvironment environment)
     {
@@ -44,5 +45,6 @@ public static class EnvironmentVariables
         DiscordWebhookId = Environment.GetEnvironmentVariable("TECHNEWS_CORE_API_DISCORD_WEBHOOK_ID");
         DiscordWebhookToken = Environment.GetEnvironmentVariable("TECHNEWS_CORE_API_DISCORD_WEBHOOK_TOKEN");
         AuthJwksUrl = Environment.GetEnvironmentVariable("TECHNEWS_CORE_API_AUTH_JWKS_URL") ?? "https://localhost/jwks";
+        AuthIssuer = Environment.GetEnvironmentVariable("TECHNEWS_CORE_API_AUTH_ISSUER");
     }
 }

@@ -41,12 +41,4 @@ public class RegisterUserRequestModel
     [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).+$", ErrorMessage = "The {0} field must have at least one digit, one lowercase, one uppercase and a special character")]
     public string Password { get; set; } = string.Empty;
 
-    /// <summary>
-    /// The password confirmation. It must be equals to the password
-    /// </summary>
-    [Required(ErrorMessage = "The {0} field is mandatory")]
-    [MinLength(8, ErrorMessage = "The {0} field must have at least {1} characters")]
-    [MaxLength(128, ErrorMessage = "The {0} field must have a maximum length of {1} characters")]
-    [Compare("Password", ErrorMessage = "The passwords does not match")]
-    public string Repassword { get; set; } = string.Empty;
 }

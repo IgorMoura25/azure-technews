@@ -18,7 +18,11 @@
   </a>
 </p>
 
-test
+# TODO
+- Correlation ID
+- .NET8
+- Event Sourcing
+
 ## Sumário
 
 - [Sobre](#sobre)
@@ -31,7 +35,13 @@ test
 - [Segurança](#segurança)
     - [Rotação das Chaves](#rotação-das-chaves)
     - [Prevenção contra possíveis ataques](#prevenção-contra-possíveis-ataques)
+- [Testes](#testes)
+    - [Testes Unitários](#testes-unitários)
+    - [Testes de Integração](#testes-de-integração)
+    - [Testes de UI/UAT (Interface/Aceitação do Usuário)](#testes-de-uiuat-interfaceaceitação-do-usuário)
 - [CI / CD](#ci--cd)
+- [Mensageria](#mensageria)
+- [Kubernetes](#kubernetes)
 - [Executando a aplicação](#executando-a-aplicação)
     - [Docker](#docker)
 
@@ -163,18 +173,100 @@ Algumas camadas adicionais de segurança foram implementadas para evitar alguns 
 | <p style="width:260px; text-align: left;">Cross Site Request Forgery (CSRF)</p> | <p style="text-align: left;">Validação de Anti Forgery Token e CORS (habilitado por padrão pelo ASP .NET Core).</p> |
 | <p style="width:260px; text-align: left;">Man in the Middle</p> | <p style="text-align: left;">Habilitado HSTS para informar ao cliente que somente requisições HTTPS são aceitas e redirecionamento de protocolos HTTP para HTTPS.</p> |
 
+# Testes
+Para este tech challenge o projeto inclui testes em diferentes níveis para garantir a qualidade e o funcionamento correto do software.
+
+<p align="center">
+  <a href="">
+    <img src=".github\images\tests-diagram.png" alt="api-architecture">
+  </a>
+</p>
+
+## Testes Unitários
+Os testes unitários visam validar a funcionalidade de unidades individuais de código, como métodos ou funções.
+
+- <b>Frameworks Utilizados:</b> xUnit, FakeItEasy (para mocks) e Bogus (para geração automática de dados fake)
+- <b>Localização dos Testes:</b> tests/unit/
+
+## Testes de Integração
+Os testes de integração validam a interação entre diferentes partes do sistema para garantir que elas funcionem corretamente juntas. Para este teste está configurado subir o banco de dados em um container ao executar o teste.
+
+- <b>Frameworks Utilizado:</b> xUnit e Bogus
+- <b>Localização dos Testes:</b> tests/integration/
+
+## Testes de UI/UAT (Interface/Aceitação do Usuário)
+Os testes de UI/UAT (User Acceptance Testing) são realizados para validar o aplicativo quanto à usabilidade, experiência do usuário e para garantir que atende aos requisitos do usuário final. Para este teste todo um ambiente é criado e depois descartado após execução do teste.
+
+- <b>Frameworks Utilizado:</b> xUnit, Bogus, Specflow e Selenium
+- <b>Localização dos Testes:</b> tests/user-interface/
 
 # CI / CD
 
-O CI / CD do TechNews consiste em três pipelines: <b>Azure Resources</b>, <b>Build</b> e <b>Deploy</b>.
+O CI / CD desse Tech Challenge consiste nos pipelines: <b>Create Azure Resources</b>, <b>Main</b> e <b>UI Test</b>.
 
-O pipeline de <b>Azure Resources</b> cria todos os recursos descritos na [Arquitetura](#arquitetura), fazendo uso dos ARM Templates disponíveis na pasta "azure". Os recursos criados são: Key Vault, Container Registry, SQL Databases e Blob Storage.
+O pipeline de <b>Create Azure Resources</b> cria todos os recursos descritos na [Arquitetura](#arquitetura), fazendo uso dos ARM Templates disponíveis na pasta "azure". Os recursos criados são: Key Vault, Container Registry, SQL Databases e Blob Storage.
 
-O pipeline de <b>Build</b> assume o papel de Integração Contínua (CI), realizando a compilação das aplicações juntamente com suas dependências. Além disso, compila as imagens com base os dockerfiles, gerando os artefatos que são publicados no Container Registry.
+O pipeline <b>Main</b> assume o papel de Integração Contínua (CI) e Entrega Contínua (CD), realizando os seguintes passos:
+- A compilação das aplicações juntamente com suas dependências; 
+- A execução dos testes Unitários, de Integração e UI/UAT;
+- A compilação das imagens com base os dockerfiles, gerando os artefatos que são publicados no Container Registry;
+- Criação das instâncias dos containers no Azure Container Instance com base as imagens;
 
-O pipeline de <b>Deploy</b> assume o papel de Entrega Contínua (CD), criando as instâncias dos containers no Azure Container Instance com base nas imagens do Container Registry.
+Já o pipeline <b>UI Test</b> serve para preparar o ambiente de teste e executar os testes de interface e aceitação do usuário (UI/UAT). Os passos são:
+- Criação do Resource Group na Azure de teste para facilitar o gerenciamento do ambiente;
+- Deploy das bases de testes;
+- Compilação das imagens com base os dockerfiles, gerando os artefatos que são publicados no Container Registry com a tag de teste;
+- Criação das instâncias dos containers no Azure Container Instance com base as imagens de teste;
+- Execução do teste de UI/UAT;
+- Descarte do ambiente de teste deletando o Resource Group;
+
+Abaixo um diagrama que demonstra como o pipeline Main e UI Test se integram.
+
+<p align="center">
+  <a href="">
+    <img src="docs\pipelines-diagram.jpg" alt="pipeline-diagram">
+  </a>
+</p>
 
 As migrations do banco são realizadas por cada aplicação (Auth API e Core API), no momento em que a aplicação é executada no container. Isso garante que as bases estão atualizadas automaticamente através das migrations do Entity Framework. Também existe a opção de executar os scripts gerados manualmente. Eles se encontram na pasta "sql".
+
+# Mensageria
+
+Para a implementação de um Message Bus, escolhemos como Broker o RabbitMQ.
+
+O Produtor ao criar uma mensagem criará também uma Exchange com o nome do evento e uma fila de DeadLetter, se caso não existirem, para armazenar as mensagens.
+
+<p align="center">
+  <a href="">
+    <img src=".github\images\dead-letter.gif" alt="dead-letter">
+  </a>
+</p>
+
+O Consumidor ao ser executado irá: criar as filas, vincular (Bind) à Exchange do evento e desvincular a fila de DeadLetter. As mensagens armazenadas na fila de DeadLetter serão posteriormente reenviadas à Exchange para serem consumidas e processadas.
+
+<p align="center">
+  <a href="">
+    <img src=".github\images\unbind-deadletter.gif" alt="dead-letter">
+  </a>
+</p>
+
+Abaixo um exemplo de uma Exchange de "UserRegisteredEvent" redirecionando mensagens para as filas, que por sua vez, são nomeadas a partir de suas responsabilidades.
+
+<p align="center">
+  <a href="">
+    <img src=".github\images\exchanges-and-queues.gif" alt="exchanges-and-queues">
+  </a>
+</p>
+
+# Kubernetes
+
+Abaixo a representação do Cluster Kubernetes do TechNews.
+
+<p align="center">
+  <a href="">
+    <img src="docs\cluster-kubernetes.jpg" alt="cluster-kubernetes">
+  </a>
+</p>
 
 # Executando a aplicação
 É possível executar a aplicação realizando a configuração manualmente, ou utilizando Docker (recomendado).

@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: technews-core-api
+  labels:
+    component: technews-apis
+spec:
+  containers:
+    - name: technews-core-api
+      image: technews-core-api:latest
+      env:
+        - name: TECHNEWS_CORE_API_DATABASE_CONNECTION_STRING
+          value: "Server=cluster-ip-database,1433;Database=TechNews;User Id=sa;Password=Pass@123;TrustServerCertificate=True; pooling=true"
+        - name: ASPNETCORE_URLS
+          value: "http://+:5142"
+        - name: TECHNEWS_CORE_API_AUTH_JWKS_URL
+          value: "http://cluster-ip-apis:5138/jwks"
+        - name: TECHNEWS_CORE_API_AUTH_ISSUER
+          value: "technews-auth-api"
+      imagePullPolicy: Never
+      ports:
+        - name: default
+          containerPort: 5142
+          protocol: TCP

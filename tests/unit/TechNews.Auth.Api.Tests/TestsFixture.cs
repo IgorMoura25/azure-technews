@@ -30,8 +30,7 @@ public class TestsFixture : IDisposable
                     Id = Guid.NewGuid(),
                     Email = f.Internet.Email(),
                     UserName = f.Internet.UserName(),
-                    Password = validPassword,
-                    Repassword = validPassword
+                    Password = validPassword
                 }
             );
 
@@ -98,7 +97,10 @@ public class TestsFixture : IDisposable
                 new User(Guid.NewGuid(), f.Internet.Email(), f.Internet.UserName())
             );
 
-        return userFake.Generate();
+        var user = userFake.Generate();
+        user.ConfirmEmail();
+        
+        return user;
     }
 
     public IList<Claim> GetFakeClaims()

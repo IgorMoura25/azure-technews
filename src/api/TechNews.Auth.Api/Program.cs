@@ -1,3 +1,4 @@
+using Serilog;
 using TechNews.Auth.Api.Configurations;
 using TechNews.Common.Library.Middlewares;
 
@@ -12,16 +13,16 @@ builder.Services
     .AddLoggingConfiguration(builder.Host)
     .ConfigureIdentity()
     .ConfigureDatabase()
-    .ConfigureDependencyInjections()
-    .AddApplicationInsightsTelemetry(options =>
-    {
-        options.ConnectionString = "InstrumentationKey=ae5e2077-ae37-42fb-860c-b409d1aa2280;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/";
-    })
+    .ConfigureEventStore()
+    .ConfigureCryptographicKeys()
+    .ConfigureBackgroundServices()
+    .ConfigureMessageBroker()
     .AddHealthChecks();
 
 var app = builder.Build();
 
 app.UseSwaggerConfiguration();
+app.UseLoggingConfiguration();
 app.UseHsts();
 app.UseHttpsRedirection();
 app.UseMiddleware<ResponseHeaderMiddleware>();
